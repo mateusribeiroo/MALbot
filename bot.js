@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
-const axios = require('axios');
-const {prefix, token} = require("./config.json");
+const axios = require("axios");
+const { prefix, token } = require("./config.json");
 
 /* 
     >(obra) => puxa todas as informações de uma obra
@@ -9,40 +9,32 @@ const {prefix, token} = require("./config.json");
 */
 
 client.on("ready", () => {
-    console.log("Estou online");
+  console.log("Estou online");
 });
 
 client.on("message", async (message) => {
-    msg = message.content.split(`${prefix}`);
+  msg = message.content.split(`${prefix}`);
 
-    
+  try {
+    let title = (
+      await axios(`https://api.jikan.moe/v3/search/anime?q=${msg[1]}`)
+    ).data.results;
 
-    try{
-        let title = (await axios(`https://api.jikan.moe/v3/search/anime?q=${msg[1]}`)).data.results
+    console.log("***Working***");
 
-        console.log('***Working***')
+    let list_title_TV = title.filter((obra) => {
+      if (obra.type.includes("TV")) {
+        ("Filtrando .. ");
+        return obra;
+      }
+    });
 
-        let list_title_TV = title.filter(obra=>{
-          if( obra.type.includes('TV')) return obra
-
-        })
-
-        list_title_TV.map(anime=>{
-            if(anime.title.includes(`${msg[1]}`)){
-                message.reply(anime.url);
-            }
-        })
-        
+    for (let i = 0; i == 1; i++) {
+      message.reply(list_title_TV[0].url);
     }
-    catch(err){
-        console.info(err);
-    }
+  } catch (err) {
+    // console.info(err);
+  }
 });
 
-
 client.login(token);
-
-
-
-
-
