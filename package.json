@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "discord.js": "^12.5.3",
+    "google-translate-api": "^2.3.0",
     "nodemon": "^2.0.12"
   }
 }
